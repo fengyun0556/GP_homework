@@ -1,11 +1,8 @@
 package com.gupao.pattern.factory.abstractFactory;
 
-import org.junit.Test;
-
 public class AbstractFactoryTest {
 
-    @Test
-    public void test(){
+    public static void main(String[] args) {
         ICourseFactory courseFactory = new JavaCourseFactory();
         courseFactory.createCourse().record();
         courseFactory.createNote().doSomeThing();
