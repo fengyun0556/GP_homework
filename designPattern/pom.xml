@@ -9,10 +9,21 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <org.spring.verion>5.1.5.RELEASE</org.spring.verion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.spring.verion>5.0.5.RELEASE</org.spring.verion>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -35,12 +46,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <artifactId>spring-aop</artifactId>
             <version>${org.spring.verion}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
+            <artifactId>spring-tx</artifactId>
+            <version>${org.spring.verion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
             <version>${org.spring.verion}</version>
         </dependency>
     </dependencies>
