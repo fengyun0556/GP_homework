@@ -3,6 +3,11 @@ package com.gupaoedu.spring.framework.context;
 import com.gupaoedu.spring.framework.annotation.GPAutowired;
 import com.gupaoedu.spring.framework.annotation.GPController;
 import com.gupaoedu.spring.framework.annotation.GPService;
+import com.gupaoedu.spring.framework.aop.GPAopConfig;
+import com.gupaoedu.spring.framework.aop.GPAopProxy;
+import com.gupaoedu.spring.framework.aop.GPCglibAopProxy;
+import com.gupaoedu.spring.framework.aop.GPJdkDynamicAopProxy;
+import com.gupaoedu.spring.framework.aop.support.GPAdvisedSupport;
 import com.gupaoedu.spring.framework.beans.GPBeanDefinition;
 import com.gupaoedu.spring.framework.beans.GPBeanWrapper;
 import com.gupaoedu.spring.framework.beans.support.GPBeanDefinitionReader;
@@ -87,6 +92,15 @@ public class GPApplicationContext extends GPDefaultListableBeanFactory implement
             } else {
                 Class<?> clazz = Class.forName(className);
                 instance = clazz.newInstance();
+
+                GPAdvisedSupport config = instantionAopConfig(beanDefinition);
+                config.setTargetClass(clazz);
+                config.setTarget(instance);
+
+                if (config.pointCutMatch()){
+                    instance = createProxy(config).getProxy();
+                }
+
                 this.factoryBeanObjectCache.put(className, instance);
                 this.factoryBeanObjectCache.put(beanDefinition.getFactoryBeanName(), instance);
             }
@@ -94,6 +108,26 @@ public class GPApplicationContext extends GPDefaultListableBeanFactory implement
             e.printStackTrace();
         }
         return instance;
+    }
+
+    private GPAdvisedSupport instantionAopConfig(GPBeanDefinition beanDefinition) {
+        GPAopConfig config = new GPAopConfig();
+        config.setPointCut(reader.getConfig().getProperty("pointCut"));
+        config.setAspectClass(reader.getConfig().getProperty("aspectClass"));
+        config.setAspectBefore(reader.getConfig().getProperty("aspectBefore"));
+        config.setAspectAfter(reader.getConfig().getProperty("aspectAfter"));
+        config.setAspectAfterThrow(reader.getConfig().getProperty("aspectAfterThrow"));
+        config.setAspectAfterThrowingName(reader.getConfig().getProperty("aspectAfterThrowingName"));
+        return new GPAdvisedSupport(config);
+    }
+
+    private GPAopProxy createProxy(GPAdvisedSupport config) {
+        Class targetClass = config.getTargetClass();
+        if (targetClass.getInterfaces().length > 0){
+            return new GPJdkDynamicAopProxy(config);
+        } else {
+            return new GPCglibAopProxy(config);
+        }
     }
 
     private void populateBean(String beanName, GPBeanDefinition beanDefinition, GPBeanWrapper beanWrapper){
