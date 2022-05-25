@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <org.spring.verion>5.1.5.RELEASE</org.spring.verion>
+        <org.spring.verion>5.2.22.RELEASE</org.spring.verion>
     </properties>
 
     <dependencies>
